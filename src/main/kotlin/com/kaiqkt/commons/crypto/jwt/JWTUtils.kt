@@ -1,6 +1,5 @@
 package com.kaiqkt.commons.crypto.jwt
 
-import io.jsonwebtoken.ExpiredJwtException
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import java.time.LocalDateTime
@@ -33,11 +32,7 @@ object JWTUtils {
     }
 
     fun getClaims(token: String, secret: String): TokenDecrypted {
-        return try {
-            val claims = Jwts.parser().setSigningKey(secret.toByteArray()).parseClaimsJws(token).body
-            TokenDecrypted(claims, false)
-        } catch (e: ExpiredJwtException) {
-            TokenDecrypted(e.claims, true)
-        }
+        val claims = Jwts.parser().setSigningKey(secret.toByteArray()).parseClaimsJws(token).body
+        return TokenDecrypted(claims)
     }
 }
